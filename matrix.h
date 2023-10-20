@@ -8,13 +8,11 @@
 #include <limits>
 
 /*
---> rowsize() oraz columnsize() zwracaja odpowiednio dlugosc rzedow i kolumn
---> wartosci wlasne operatora symetrycznego szukane przez sprowadzenie do postaci trojdiagonalnej i dalszy rozklad QL
-    * w przypadku operatora hermitowskiego zagadnienie zamieniane jest na symetryczne rzeczywiste z macierza o rozmiarze 2n
---> wyznacznik liczony metoda eliminacji Gaussa
---> macierz odwrotna liczona metoda eliminacji Gaussa; A*B=Id
---> MatrixPower wykorzystuje algorytm szybkiego mnozenia
---> KroneckerProduct zwraca iloczyn tensorowy macierzy
+--> rowsize() oraz columnsize() return the sizes of columns and rows
+--> matrix determinant is calculated via Gauss elimination
+--> matrix inverse calculated by solving A*B=Id
+--> MatrixPower uses a fast multiplication algorithm
+--> KroneckerProduct returns the tensor product of matrices
 */
 
 using namespace std;
@@ -32,7 +30,7 @@ public:
 	}
 	Matrix(unsigned int w, unsigned int k):w(w),k(k)
 	{
-		M = new T*[w];//tworzenie tablicy wskaznikow
+		M = new T*[w]; //creating an array of pointers
 		for(int i=0;i<w;i++)
 			M[i] = new T[k];  //M[w][k]
 	}
@@ -174,7 +172,7 @@ Matrix<T> operator * (const Matrix<T> &A, const Matrix<T> &B)
 	Matrix<T> C(A.w,B.k);
 	if(A.k!=B.w)
 	{
-		cout<<"Nie mozna wykonac mnozenia - zle rozmiary macierzy!"<<endl;		
+		cout<<"Multiplication error: incompatible matrix dimensions!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -201,7 +199,7 @@ Matrix<T> operator + (const Matrix<T> &A, const Matrix<T> &B)
 	Matrix<T> C(A.w,B.k);
 	if((A.w!=B.w)||(A.k!=B.k))
 	{
-		cout<<"Nie mozna wykonac dodawania - rozne rozmiary macierzy!"<<endl;		
+		cout<<"Addition arror: incompatible matrix dimensions!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -224,7 +222,7 @@ Matrix<T> operator - (const Matrix<T> &A, const Matrix<T> &B)
 	Matrix<T> C(A.w,B.k);
 	if((A.w!=B.w)||(A.k!=B.k))
 	{
-		cout<<"Nie mozna wykonac odejmowania - rozne rozmiary macierzy!"<<endl;		
+		cout<<"Subtraction arror: incompatible matrix dimensions!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -658,7 +656,7 @@ T Tr(const Matrix<T> &A)
 	
 	if(A.w!=A.k)
 	{
-		cout<<"Tr: macierz nie jest kwadratowa!"<<endl;
+		cout<<"Tr: matrix is not square!"<<endl;
 		system("pause");
 	}
 	
@@ -1143,7 +1141,7 @@ Matrix<complex<T> > operator * (const Matrix<complex<T> > &A, const Matrix<compl
 	Matrix<complex<T> > C(A.w,B.k);
 	if(A.k!=B.w)
 	{
-		cout<<"Nie mozna wykonac mnozenia - zle rozmiary macierzy!"<<endl;		
+		cout<<"Multiplication error: incompatible matrix sizes!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -1170,7 +1168,7 @@ Matrix<complex<T> > operator + (const Matrix<complex<T> > &A, const Matrix<compl
 	Matrix<complex<T> > C(A.w,B.k);
 	if((A.w!=B.w)||(A.k!=B.k))
 	{
-		cout<<"Nie mozna wykonac dodawania - rozne rozmiary macierzy!"<<endl;		
+		cout<<"Addition error: incompatible matrix sizes!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -1193,7 +1191,7 @@ Matrix<complex<T> > operator - (const Matrix<complex<T> > &A, const Matrix<compl
 	Matrix<complex<T> > C(A.w,B.k);
 	if((A.w!=B.w)||(A.k!=B.k))
 	{
-		cout<<"Nie mozna wykonac odejmowania - rozne rozmiary macierzy!"<<endl;		
+		cout<<"Subtraction error: incompatible matrix sizes!"<<endl;		
 		system("pause");
 		return C;
 	}
@@ -1291,7 +1289,7 @@ template <class T>
 bool GaussElimination(Matrix<complex<T> >& A)
 {
 	if(A.w>A.k)
-		cout<<"GaussElimination: macierz ma wiecej rzedow nic kolumn!"<<endl;
+		cout<<"GaussElimination: matrix has more rows than columns!"<<endl;
 	for(int k=0;k<A.w;k++)
 	{
 		int i_max=k;
@@ -1324,7 +1322,7 @@ complex<T> Det(const Matrix<complex<T> > &A)
 	
 	if(B.w!=B.k)
 	{
-		cout<<"Det: macierz nie jest kwadratowa!"<<endl;
+		cout<<"Det: matrix is not square!"<<endl;
 		system("pause");
 	}
 	for(int k=0;k<B.w;k++)
@@ -1361,7 +1359,7 @@ const Matrix<complex<T> > Inv(const Matrix<complex<T> > &A)
 {
 	if(A.w!=A.k)
 	{
-		cout<<"Inv: macierz nie jest kwadratowa!"<<endl;
+		cout<<"Inv: matrix is not square!"<<endl;
 		system("pause");
 	}
 	int SIZE=A.w;
